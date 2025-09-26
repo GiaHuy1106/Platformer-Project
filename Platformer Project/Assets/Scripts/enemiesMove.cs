@@ -33,13 +33,13 @@ public class enemiesMove : MonoBehaviour
         { 
             if(transform.position.x > playerTransform.position.x)
             {
-                transform.localScale = new Vector3(1,1,1);
-                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+                transform.localScale = new Vector3(-1,1,1);
+                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
             }
             if (transform.position.x < playerTransform.position.x)
             {
-                transform.localScale = new Vector3(-1, 1, 1);
-                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+                transform.localScale = new Vector3(1, 1, 1);
+                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
             }
         }
         else

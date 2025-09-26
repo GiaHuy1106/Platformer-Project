@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections; // <-- Add this line
 
 public class playerMove : MonoBehaviour
 {
@@ -12,11 +13,6 @@ public class playerMove : MonoBehaviour
     [SerializeField] private Image[] heartIcons;
     private bool isMoving = false;
     private Animator Anim;
-
-    private int comboIndex = 0;          // Đánh đang ở hit thứ mấy
-    private float comboTimer = 0f;       // Thời gian reset combo
-    public float comboResetTime = 1f;
-
 
     void Start()
     {
@@ -30,17 +26,6 @@ public class playerMove : MonoBehaviour
         PlayerMove();
         PlayerJump();
         PlayerFight();
-
-        // Reset combo sau 1s nếu không bấm tiếp
-        if (comboIndex > 0)
-        {
-            comboTimer += Time.deltaTime;
-            if (comboTimer > comboResetTime)
-            {
-                comboIndex = 0;
-                comboTimer = 0;
-            }
-        }
     }
 
     private void PlayerMove()
@@ -56,7 +41,6 @@ public class playerMove : MonoBehaviour
             spriteRenderer.flipX = true; // Face left
         }
         Anim.SetBool("Run", moveInput != 0);
-        
     }
 
     private void PlayerJump()
@@ -71,21 +55,19 @@ public class playerMove : MonoBehaviour
 
     private void PlayerFight()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            comboIndex++;
-            if (comboIndex > 3) comboIndex = 1; // Giới hạn combo = 3 đòn
-
-            comboTimer = 0; // reset timer khi bấm tiếp
-
-            Anim.SetInteger("ComboIndex", comboIndex);
             Anim.SetTrigger("Attack");
-            Debug.Log("Player attack combo " + comboIndex);
+            Debug.Log("Player Attack!");
+            StartCoroutine(ResetAttackAfterTime(0.5f));
         }
-
     }
-
-    
+    private IEnumerator ResetAttackAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Anim.ResetTrigger("Attack");
+        Debug.Log("Attack animation auto reset sau " + time + "s");
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -100,20 +82,19 @@ public class playerMove : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.y, jumpForce * 0.3f); // Bounce the player up slightly
             Destroy(gameObject); // Destroy player           
         }
-
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
         if (collision.gameObject.CompareTag("HitBox"))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.3f); // Bounce the player up slightly
-            Health.instance.TakeDamage(1); // Reduce health by 1    
+            playerHealth.instance.TakeDamage(1); // Reduce health by 1    
             //GameManager gameManager = FindAnyObjectByType<GameManager>();
             //gameManager.GameOver(); // Trigger game over in GameManager
             Debug.Log("Player hit enemy and game over");
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {       
+        
 
         if (collision.gameObject.CompareTag("hitPoint"))
         {
@@ -126,7 +107,7 @@ public class playerMove : MonoBehaviour
         {
             Debug.Log("+1");
             Destroy(collision.gameObject); // Destroy collectible
-            Health.instance.Heal(1); // Heal player by 1
+            playerHealth.instance.Heal(1); // Heal player by 1
             //GameManager gameManager = FindAnyObjectByType<GameManager>();
             //gameManager.AddScore(1); // Add score in GameManager
         }

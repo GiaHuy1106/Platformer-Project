@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - hitPoint
   - Hearts
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -21,12 +22,12 @@ TagManager:
   - UI
   - player
   - enemies
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - 5
+  - 4
+  - 3
+  - 2
+  - 1
+  - 0
   - 
   - 
   - 

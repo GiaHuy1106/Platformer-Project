@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour
+public class playerHealth : MonoBehaviour
 {
-    public static Health instance;
+    public static playerHealth instance;
     public int maxHealth = 5;
     public int currentHealth;
-
+    public SpriteRenderer playerSr;
+    public playerMove playerMovement;
     void Awake()
     {
         if (instance == null)
@@ -30,6 +31,8 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            playerSr.enabled = false;
+            playerMovement.enabled = false;
         }
     }
 
