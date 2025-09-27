@@ -13,11 +13,15 @@ public class playerMove : MonoBehaviour
     [SerializeField] private Image[] heartIcons;
     private bool isMoving = false;
     private Animator Anim;
+    public GameObject attackBox;
+    public float attackDuration = 1; // thời gian attack tồn tại
+    private float attackTimer = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
+        Anim.SetBool("Attack", false);
     }
 
     // Update is called once per frame
@@ -26,6 +30,19 @@ public class playerMove : MonoBehaviour
         PlayerMove();
         PlayerJump();
         PlayerFight();
+
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime;
+
+            // Hết thời gian -> reset
+            if (attackTimer <= 0)
+            {
+                attackBox.SetActive(false);
+                Anim.SetBool("Attack", false);
+                Debug.Log("Attack animation auto reset sau " + attackDuration + "s");
+            }
+        }
     }
 
     private void PlayerMove()
@@ -41,6 +58,7 @@ public class playerMove : MonoBehaviour
             spriteRenderer.flipX = true; // Face left
         }
         Anim.SetBool("Run", moveInput != 0);
+        //SoundManager.Instance.PlaySFX(SoundManager.Instance.sfxJump);
     }
 
     private void PlayerJump()
@@ -49,24 +67,26 @@ public class playerMove : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.y, jumpForce);
             isGrounded = false; // Prevent double jumping
+            Anim.SetBool("Jump", !isGrounded);
+            //SoundManager.Instance.PlaySFX(SoundManager.Instance.sfxJump);
         }
-        Anim.SetBool("Jump", !isGrounded);
+        
     }
 
     private void PlayerFight()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && attackTimer <= 0)
         {
-            Anim.SetTrigger("Attack");
+            Anim.SetBool("Attack", true);
             Debug.Log("Player Attack!");
-            StartCoroutine(ResetAttackAfterTime(0.5f));
+
+            // Bật hitbox khi bắt đầu tấn công
+            attackBox.SetActive(true);
+
+            // Bắt đầu đếm thời gian
+            attackTimer = attackDuration;
+            //SoundManager.Instance.PlaySFX(SoundManager.Instance.sfxAttack);
         }
-    }
-    private IEnumerator ResetAttackAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Anim.ResetTrigger("Attack");
-        Debug.Log("Attack animation auto reset sau " + time + "s");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -82,40 +102,42 @@ public class playerMove : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.y, jumpForce * 0.3f); // Bounce the player up slightly
             Destroy(gameObject); // Destroy player           
         }
+
         if (collision.gameObject.CompareTag("HitBox"))
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce * 0.3f); // Bounce the player up slightly
-            playerHealth.instance.TakeDamage(1); // Reduce health by 1    
-            //GameManager gameManager = FindAnyObjectByType<GameManager>();
-            //gameManager.GameOver(); // Trigger game over in GameManager
-            Debug.Log("Player hit enemy and game over");
+            PlayerHealth.Instance.TakeDamage(1); // Reduce health by 1    
+            //HealthManager.instance.TakeDamage(10); // Reduce health by 20
+            Debug.Log("Player hit enemy");
+            //SoundManager.Instance.PlaySFX(SoundManager.Instance.sfxHit);
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {       
-        
-
+    {
         if (collision.gameObject.CompareTag("hitPoint"))
         {
             GameObject enemy = collision.transform.root.gameObject;
             Destroy(enemy); // Xóa luôn enemy
             Debug.Log("Enemy destroyed!");
+            //SoundManager.Instance.PlaySFX(SoundManager.Instance.sfxAttack);
         }
+
+        
 
         if (collision.gameObject.CompareTag("Hearts"))
         {
             Debug.Log("+1");
             Destroy(collision.gameObject); // Destroy collectible
-            playerHealth.instance.Heal(1); // Heal player by 1
-            //GameManager gameManager = FindAnyObjectByType<GameManager>();
-            //gameManager.AddScore(1); // Add score in GameManager
+            //playerHealth.instance.Heal(1); // Heal player by 1
+            //HealthManager.instance.Heal(10);
         }
 
         if (collision.gameObject.CompareTag("Door"))
         {
             //Anim.SetTrigger("next level");
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
             Debug.Log("Level Complete! Load next level.");
         }
     }

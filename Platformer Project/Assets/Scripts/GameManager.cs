@@ -5,18 +5,22 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [Header("UI Panels")]
-    [SerializeField] private GameObject optionPanel; // panel chứa điều khiển âm thanh
+    [SerializeField] private GameObject optionPanel;
+    [SerializeField] private GameObject instructionPanel; 
+    
 
     void Start()
     {
         if (optionPanel != null)
             optionPanel.SetActive(false); // ẩn panel lúc đầu
+        if (instructionPanel != null)
+            instructionPanel.SetActive(false); // ẩn panel lúc đầu
     }
 
     // Gọi hàm này khi bấm nút Play
-    public void PlayGame()
+    public void Play()
     {
-        SceneManager.LoadScene(1); // load scene có index = 1
+        instructionPanel.SetActive(true);
     }
 
     // Gọi hàm này khi bấm nút Option
@@ -38,4 +42,9 @@ public class GameManager : MonoBehaviour
         if (optionPanel != null)
             optionPanel.SetActive(false);
     }
+
+    public void startGame()
+    {
+        SceneManager.LoadScene(1);
+    }    
 }

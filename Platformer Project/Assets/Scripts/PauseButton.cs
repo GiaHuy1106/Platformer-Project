@@ -53,4 +53,12 @@ public class PauseButton : MonoBehaviour
         isPaused = false;
         pausePanel.SetActive(false); // Ẩn panel tạm dừng
     }
+
+    public void closePanel()
+    {
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(false); // Ẩn panel tạm dừng
+        }
+    }    
 }

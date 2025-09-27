@@ -13,6 +13,8 @@ TagManager:
   - hitPoint
   - Hearts
   - SpawnPoint
+  - AttackPoint
+  - bossDeadPoint
   layers:
   - Default
   - TransparentFX

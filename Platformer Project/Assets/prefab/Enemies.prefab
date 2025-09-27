@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6232295892243325749}
   m_Layer: 0
   m_Name: Enemies
-  m_TagString: HitBox
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   attackDistance: 4
   moveSpeed: 2
   timer: 0
-  playerTransform: {fileID: 5422838190078095520, guid: 917cdbfac2b3f884bbda586f461b95b9, type: 3}
+  playerTransform: {fileID: 2736629858761380183, guid: b09633bf174361b438971510a864fa44, type: 3}
   isChasing: 0
   chaseRange: 2
 --- !u!1 &3511566701447282656
@@ -279,7 +279,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.24007034, y: 0.3077743}
+  m_Offset: {x: 0.32724094, y: 0.15447426}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -289,7 +289,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.64820766, y: 0.85467386}
+  m_Size: {x: 0.82254887, y: 1.161274}
   m_EdgeRadius: 0
 --- !u!1 &4712060486224607511
 GameObject:
@@ -384,11 +384,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.22223794, y: 0.45213747}
+  m_Offset: {x: 0.19518507, y: 0.45213747}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -398,7 +398,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.61254287, y: 0.56594753}
+  m_Size: {x: 0.5584371, y: 0.56594753}
   m_EdgeRadius: 0
 --- !u!1 &8889951142669711307
 GameObject:

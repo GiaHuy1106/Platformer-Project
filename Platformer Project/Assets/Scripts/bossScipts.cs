@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class enemiesMove : MonoBehaviour
+public class bossScipts : MonoBehaviour
 {
     public Transform rayCast;
     public LayerMask raycastMask;
@@ -105,13 +105,13 @@ public class enemiesMove : MonoBehaviour
         }
         if (cooling)
         {
-            anim.SetBool("Attack", false);
+            anim.SetBool("Fight", false);
         }
     }
 
     private void move()
     {
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Fight"))
         {
             Vector2 targetPos = new Vector2(target.transform.position.x, transform.position.y);
             transform.position = Vector2.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -123,14 +123,14 @@ public class enemiesMove : MonoBehaviour
         timer = intTimer;
         attackMode = true;
         anim.SetBool("Run", false);
-        anim.SetBool("Attack", true);
+        anim.SetBool("Fight", true);
     }
 
     void stopAttack()
     {
         cooling = false;
         attackMode = false;
-        anim.SetBool("Attack", false);
+        anim.SetBool("Fight", false);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -154,8 +154,3 @@ public class enemiesMove : MonoBehaviour
         }
     }
 }
-
-
-
-
-
